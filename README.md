@@ -20,10 +20,12 @@ figure out hoa to install python version xyz and document
 piythonxyz -m venv SECCHI
 activate SECCHI
 
+```
 pip install cloudmesh-installer
 cloudmesh-installer git clone cms
 cloudmesh-installer install cms
-git clone ...
+# git clone git@github.com:cloudmesh/cloudmesh-secchi.git
+git clone https://github.com/cloudmesh/cloudmesh-secchi.git
 cd cloudmesh-secchi
 pip install -e . 
-
+```
