@@ -23,6 +23,10 @@ class Video:
         # non = all, if name only that
         raise NotImplementedError
 
+    def download(self, url, destination=None):
+        # python requests to download
+        # if none put it in cwd/dest
+        raise NotImplementedError
 
 
 
