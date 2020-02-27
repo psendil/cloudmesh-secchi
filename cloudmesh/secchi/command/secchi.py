@@ -16,8 +16,14 @@ class SecchiCommand(PluginCommand):
         ::
 
           Usage:
-                secchi --file=FILE
-                secchi list
+                secchi upload VIDEO [--training]
+                secchi list [VIDEO]
+                sechhi delete VIDEOS
+                secchi server start
+                secchi server stop
+                secchi server status
+                secchi labeler install
+                secchi labeler run
 
           This command does some useful things.
 
@@ -28,19 +34,20 @@ class SecchiCommand(PluginCommand):
               -f      specify the file
 
         """
-        arguments.FILE = arguments['--file'] or None
 
         VERBOSE(arguments)
 
-        m = Manager()
 
-        if arguments.FILE:
-            print("option a")
-            m.list(path_expand(arguments.FILE))
+
+
+        if arguments.upload and arguments["--training"]:
+            print ("training")
+
+        if arguments.upload:
+            print ("analyse")
+
 
         elif arguments.list:
-            print("option b")
-            m.list("just calling list without parameter")
+            print ("list")
 
-        Console.error("This is just a sample")
         return ""
