@@ -1,5 +1,10 @@
 class Video:
 
+
+    def ___init___(self, dest=None):
+        # if none put it in cwd/dest
+        self.dest = dest
+
     def train(self, video):
 
         raise NotImplementedError
@@ -21,11 +26,13 @@ class Video:
         # images
         # size
         # non = all, if name only that
+        # use glob.glob in teh des dir
         raise NotImplementedError
 
-    def download(self, url, destination=None):
+    def download(self, url, name=None):
         # python requests to download
-        # if none put it in cwd/dest
+        # put the file into dest under name, if name is not specified put it in
+        # what if file already exists?
         raise NotImplementedError
 
 
