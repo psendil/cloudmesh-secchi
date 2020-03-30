@@ -1,13 +1,16 @@
 import os
 import cv2
 import shutil
+from pathlib import Path
 from cloudmesh.common.util import path_expand
 
 
 class Video:
-    path = os.path.abspath(__file__)
-    dir_path = os.path.dirname(path)
-    dest = os.path.join(dir_path, 'input')
+    p = Path(os.path.abspath(__file__))
+    #dir_path = os.path.dirname(path)
+    root = p.parent.parent.parent
+    dest = os.path.join(root, 'src')
+    valid_extn = ["mp4", "avi"]
 
     def ___init___(self, dest=None):
         # if none put it in cwd/dest
@@ -25,24 +28,11 @@ class Video:
 
 
     def upload(self, filepath=None, kind="analyse"):
-        # kind = training
-        filepath = path_expand("~/testfile.txt")
-        print(filepath)
-        #path = os.path.join(os.getcwd(),video)
-        #path = os.path.expanduser(filename)
-        source = path_expand(filepath)
-
-        file = os.path.split(source)[1]
-        #os.path.dirname
-        #os.path.pathname
-        extn = file.split(".")[1]
-        if extn in ["mp4", "avi", "txt"]:
-            print("supported file format")
-            #move file to input folder
-            shutil.move(source,self.dest)
-        else:
-            print("Not a supported video file")
-        #raise NotImplementedError
+        file = os.path.basename(filepath)
+        try:
+            shutil.copy(filepath, self.dest)
+        except NotImplementedError:
+            print("Error uploading file")
 
     def list(self, name=None):
         # lists videos and tells us info about them in json format
@@ -112,10 +102,42 @@ class Video:
         for file in files:
             shutil.move(input_dir + file, dest)
 
+    def validateFileFormat(self, file, str='notPredict'):
+        filename = os.path.basename(file)
+        if str == 'predict':
+
+            extn = filename.split(".")[1]
+            if extn in self.valid_extn:
+                return True
+            else:
+                return False
+        else:
+            extn = filename.split(".")[-1]
+            if extn is None:
+                # Its a folder path
+                return True
+            else:
+                # It's not a folder path
+                return False
+
+    def getVideoFile(self):
+        files = os.listdir(self.dest)
+
+        for file in files:
+            extn = file.split(".")[-1]
+            if extn in self.valid_extn:
+                print(file)
+                return file
+
+        print("No video file exists")
+        return None
+
+
 
 if __name__== "__main__":
     #print(__import__("Video"))
     v= Video()
-    v.upload()
+    #v.upload()
+    v.getVideoFile()
 
 
