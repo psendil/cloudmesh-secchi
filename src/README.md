@@ -38,7 +38,7 @@ pip install pillow, lxml, matplotlib, opencv-python, cython
 cms secchi upload '~/Desktop/file.mp4' --predict
 ```
 
-For now, upload video file manually in src folder under cloudmesh-secchi
+For now, upload video file manually in src folder under cloudmesh-secchi.
 
 ### Run predict through cms command(IN PROGRESS)
 
@@ -46,4 +46,11 @@ For now, upload video file manually in src folder under cloudmesh-secchi
 cms secchi run --predict
 ```
 
-For now, run predict.py file in src folder/
+To run it manually: 
+
+* change video_name variable in line 37 of src/predict.py.
+
+```
+VIDEO_NAME = 'Yi-Site1.mp4' # update file name here
+```
+* run predict.py file in src folder
