@@ -22,6 +22,7 @@ import cv2
 import numpy as np
 import tensorflow as tf
 import sys
+import matplotlib.pyplot as plt
 
 # This is needed since the notebook is stored in the object_detection folder.
 #sys.path.append("")
@@ -29,8 +30,8 @@ import sys
 # Import utilites
 #from object_detection.utils import label_map_util
 #from utils_tf import label_map_util
-from .utils_tf import label_map_util
-from .utils_tf import visualization_utils as vis_util
+from utils_tf import label_map_util
+from utils_tf import visualization_utils as vis_util
 #from object_detection.utils import visualization_utils as vis_util
 
 
@@ -39,7 +40,8 @@ class Predict:
     MODEL_NAME = 'trained-inference-graphs'
     #VIDEO_NAME = 'Yi-Site1.mp4'
     # Grab path to current working directory
-    CWD_PATH = os.path.abspath(__file__)
+    ABS_PATH = os.path.abspath(__file__)
+    CWD_PATH = os.path.dirname(ABS_PATH)
 
     # Path to frozen detection graph .pb file, which contains the model that is used
     # for object detection.
@@ -56,7 +58,9 @@ class Predict:
     NUM_CLASSES = 1
     scaling_factorx = 0.5
     scaling_factory = 0.5
-
+    SCORES = []
+    COUNTER = 0
+    TIME_STAMP = []
 
     def __init__(self, video):
         self.VIDEO_NAME = video
@@ -111,6 +115,8 @@ class Predict:
             # Acquire frame and expand frame dimensions to have shape: [1, None, None, 3]
             # i.e. a single-column array, where each item in the column has the pixel RGB value
             ret, frame = video.read()
+            time_stamp = video.get(cv2.CAP_PROP_POS_MSEC)
+            #print(time_stamp)
             frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             frame_expanded = np.expand_dims(frame_rgb, axis=0)
 
@@ -118,7 +124,11 @@ class Predict:
             (boxes, scores, classes, num) = sess.run(
                 [detection_boxes, detection_scores, detection_classes, num_detections],
                 feed_dict={image_tensor: frame_expanded})
-
+            # draw a plot
+            #print("Boxs:", boxes)
+            #print("scores:",scores[0][0])
+            #print("classes:",classes)
+            #print("num:", num)
             # Draw the results of the detection (aka 'visulaize the results')
             vis_util.visualize_boxes_and_labels_on_image_array(
                 frame,
@@ -133,11 +143,35 @@ class Predict:
             #resize = cv2.resize(frame, None, fx=scaling_factorx, fy=scaling_factory, interpolation=cv2.INTER_AREA)
             # All the results have been drawn on the frame, so it's time to display it.
             cv2.imshow('Object detector', frame)
+            # Code for variable used in plot.
+            self.SCORES.append(scores[0][0])
+            self.TIME_STAMP.append(round(time_stamp/1000, 1))
+            #self.COUNTER.append()
 
             # Press 'q' to quit
             if cv2.waitKey(1) == ord('q'):
                 break
 
         # Clean up
+        # plt.plot(boxes,scores)
+        print("SCORES LIST: ",self.SCORES)
+        print("Time Stamp: ", self.TIME_STAMP)
         video.release()
         cv2.destroyAllWindows()
+
+    def plot(self):
+        print("test plot")
+        #plt.plot(range(1, len(self.SCORES), 25), self.SCORES[::25])
+        plt.plot(self.TIME_STAMP[::25], self.SCORES[::25])
+        plt.xlabel("Time Stamp in seconds")
+        plt.ylabel(" Prediction Score %")
+        plt.savefig("mygraph.png")
+        #plt.show()
+
+
+
+if __name__=="__main__":
+    print("predict.py")
+    p = Predict('Yi-Site1.mp4')
+    p.run()
+    p.plot()
