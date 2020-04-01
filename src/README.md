@@ -54,3 +54,11 @@ To run it manually:
 VIDEO_NAME = 'Yi-Site1.mp4' # update file name here
 ```
 * run predict.py file in src folder
+
+### Predict Screen and Graph
+
+Example of prediction video and graph is shown:
+
+![Output Graph](image/mygraph.png) 
+
+![Predictor Output Image](image/Predictor_Image.png)
