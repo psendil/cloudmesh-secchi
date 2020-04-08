@@ -3,12 +3,13 @@ import cv2
 import shutil
 from pathlib import Path
 from cloudmesh.common.util import path_expand
+import glob
 
 
 class Video:
     p = Path(os.path.abspath(__file__))
     #dir_path = os.path.dirname(path)
-    root = p.parent.parent.parent
+    root = p.parent
     dest = os.path.join(root, 'src')
     valid_extn = ["mp4", "avi"]
 
@@ -132,6 +133,23 @@ class Video:
         print("No video file exists")
         return None
 
+    def removeFile(self,file=None):
+
+        if file is None:
+            #remove all video file
+            files = os.listdir(self.dest)
+            for file in files:
+                extn = file.split('.')[-1]
+                if extn in self.valid_extn:
+                    os.remove(os.path.join(self.dest, file))
+        else:
+            os.remove(os.path.join(self.dest,file))
+
+    def listsVideo(self):
+
+        os.chdir(self.dest)
+        for file in glob.glob("*.mp4"):
+            print(file)
 
 
 if __name__== "__main__":

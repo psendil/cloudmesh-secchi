@@ -11,8 +11,10 @@ from pprint import pprint
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.shell.command import map_parameters
 import os
+from cloudmesh.secchi.src.predict import Predict
+from pathlib import Path
 
-from src.predict import Predict
+#from src.predict import Predict
 
 
 class SecchiCommand(PluginCommand):
@@ -24,8 +26,8 @@ class SecchiCommand(PluginCommand):
         ::
 
           Usage:
-                secchi upload [VIDEO] [--training][--validate][--predict]
-                secchi list [VIDEO]
+                secchi upload [FILE][--training][--validate][--predict]
+                secchi list input [--training][--validate][--predict]
                 sechhi delete VIDEOS
                 secchi server start
                 secchi server stop
@@ -34,16 +36,31 @@ class SecchiCommand(PluginCommand):
                 secchi labelImg run
                 secchi captureImage
                 secchi run [--predict][--training]
+                secchi remove [VIDEO][--training][--validate][--predict]
+                secchi show graph
 
           This command does some useful things.
 
           Arguments:
-              FILE   a file name
+              upload   To upload training, validation, prediction files.
+              list      To list out all the files
+              delete
+              server
+              start
+              stop
 
           Options:
-              -f      specify the file
+              FILE          a file or directory name to upload
+              input         input files.
+              --training    command is used for training
+              --validate    command is used for validation set
+              --predict     command is used for prediction
 
         """
+        # command examples:
+        #   cms secchi upload '~\Desktop\Yi-Site1.mp4' --predict
+        #   cms secchi remove --predict
+        #   cms secchi show graph
 
         map_parameters(arguments,
                        'training',
@@ -51,9 +68,6 @@ class SecchiCommand(PluginCommand):
                        'predict')
 
         VERBOSE(arguments)
-
-
-
 
         if arguments.upload and arguments.training:
             # upload training image set to training folder
@@ -64,7 +78,7 @@ class SecchiCommand(PluginCommand):
         elif arguments.upload and arguments.predict:
             # validate extension and file size. Max size=125 MB
             # upload video file in for prediction.
-            file = path_expand(arguments.VIDEO)
+            file = path_expand(arguments.FILE)
             size = os.path.getsize(file)/(1024*1024)
             if size > 100:
                 print("Size limit 100MB exceeds. End upload")
@@ -80,26 +94,44 @@ class SecchiCommand(PluginCommand):
         elif arguments.captureImage:
             print("capture image from videos for training purpose")
 
-        elif arguments.list:
-            banner("THis is list command")
-            Console.okay("okay")
-            print("list")
+        elif arguments.list and arguments.input:
+            if arguments.predict:
+                print("list all input video")
+            elif arguments.training:
+                print("List all training images")
+            elif arguments.validate:
+                print("list all validation images")
+
         elif arguments.run and arguments.predict:
             print("run prediction")
             # check if video file exists in src location
             v = Video()
             file = v.getVideoFile()
             if(file is not None):
-                # run predict.py
-                # execute predict.py
-                print("Hola!")
-                # change ENV to ENVTF
-                shell.run("C:\\Users\\dmall\\ENVTF1.3\\Scripts\\activate")
-                p = Predict()
-                p.run
+                p = Predict(file)
+                p.run()
+                p.plot()
 
         elif arguments.run and arguments.training:
             print("run training")
+  
+        elif arguments.remove and arguments.predict:
+            print("Delete uploaded file")
+            video = arguments.FILE
+            v = Video()
+            v.removeFile(video)
+        
+        elif arguments.show and arguments.graph:
+            p = Path(os.path.abspath(__file__))
+            path = p.parent.parent
+            file = os.path.join(path, 'src','mygraph.png')
+            
+            #fileObject = open(file, 'r')
+            if os.path.exists(file):
+              os.system(file)
+            else:
+              print("File doesn't exists")
+
         return ""
 
 
