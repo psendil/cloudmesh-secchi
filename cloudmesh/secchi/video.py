@@ -4,18 +4,22 @@ import shutil
 from pathlib import Path
 from cloudmesh.common.util import path_expand
 import glob
-
+from cloudmesh.common.Shell import Shell
 
 class Video:
-    p = Path(os.path.abspath(__file__))
-    #dir_path = os.path.dirname(path)
-    root = p.parent
-    dest = os.path.join(root, 'src')
+
+#Video.__filename__
+# directory = os.path.dirname(Vido.__filename__
+
     valid_extn = ["mp4", "avi"]
 
-    def ___init___(self, dest=None):
-        # if none put it in cwd/dest
-        self.dest = dest
+    def __init__(self, dest="~/.cloudmesh/secchi"):
+        # if none put it
+        # in cwd/dest
+        self.dest = path_expand(dest)
+        # dir_path = os.path.dirname(path)
+        Shell.mkdir(dest)
+        print("dest Path:", self.dest)
 
     def train(self, video):
 

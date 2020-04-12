@@ -23,6 +23,8 @@ import numpy as np
 import tensorflow as tf
 import sys
 import matplotlib.pyplot as plt
+from cloudmesh.common.util import path_expand
+
 
 # This is needed since the notebook is stored in the object_detection folder.
 #sys.path.append("")
@@ -30,8 +32,8 @@ import matplotlib.pyplot as plt
 # Import utilites
 #from object_detection.utils import label_map_util
 #from utils_tf import label_map_util
-from cloudmesh.secchi.src.utils_tf import label_map_util
-from cloudmesh.secchi.src.utils_tf import visualization_utils as vis_util
+from cloudmesh.secchi.tensorflow.utils_tf import label_map_util
+from cloudmesh.secchi.tensorflow.utils_tf import visualization_utils as vis_util
 #from object_detection.utils import visualization_utils as vis_util
 
 
@@ -42,6 +44,8 @@ class Predict:
     # Grab path to current working directory
     ABS_PATH = os.path.abspath(__file__)
     CWD_PATH = os.path.dirname(ABS_PATH)
+    VIDEO_PATH = path_expand("~/.cloudmesh/secchi")
+
 
     # Path to frozen detection graph .pb file, which contains the model that is used
     # for object detection.
@@ -78,7 +82,8 @@ class Predict:
 
         # Load the Tensorflow model into memory.
         # Path to video
-        PATH_TO_VIDEO = os.path.join(self.CWD_PATH, self.VIDEO_NAME)
+        #PATH_TO_VIDEO = os.path.join(self.CWD_PATH, self.VIDEO_NAME)
+        PATH_TO_VIDEO = os.path.join(self.VIDEO_PATH, self.VIDEO_NAME)
 
         detection_graph = tf.Graph()
         with detection_graph.as_default():

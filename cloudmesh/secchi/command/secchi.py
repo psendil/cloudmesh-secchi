@@ -11,9 +11,9 @@ from pprint import pprint
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.shell.command import map_parameters
 import os
-from cloudmesh.secchi.src.predict import Predict
 from pathlib import Path
 
+# from.cloudmesh.secchi.tensorflow.predict import predict
 #from src.predict import Predict
 
 
@@ -84,12 +84,11 @@ class SecchiCommand(PluginCommand):
                 print("Size limit 100MB exceeds. End upload")
             # validate extension:
             else:
-                v = Video()
+                v = Video("~/.cloudmesh/secchi")
                 if(v.validateFileFormat(file,'predict')):
                     # valid format
                     print("format is valid")
                     v.upload(file)
-
 
         elif arguments.captureImage:
             print("capture image from videos for training purpose")
@@ -103,6 +102,8 @@ class SecchiCommand(PluginCommand):
                 print("list all validation images")
 
         elif arguments.run and arguments.predict:
+            from cloudmesh.secchi.tensorflow.predict import Predict
+
             print("run prediction")
             # check if video file exists in src location
             v = Video()

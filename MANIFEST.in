@@ -1,0 +1,8 @@
+include __init__.py
+include requirements.txt
+include cloudmesh/__init__.py
+recursive-include cloudmesh *.meta
+recursive-include cloudmesh *.index
+recursive-include cloudmesh *.pb
+exclude .gitignore
+exclude .gitreview
