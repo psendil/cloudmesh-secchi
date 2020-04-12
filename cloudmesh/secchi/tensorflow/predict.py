@@ -165,18 +165,25 @@ class Predict:
         cv2.destroyAllWindows()
 
     def plot(self):
+
         print("test plot")
         #plt.plot(range(1, len(self.SCORES), 25), self.SCORES[::25])
+        # plt.plot(self.TIME_STAMP[::25], self.SCORES[::25])
+        # plt.xlabel("Time Stamp in seconds")
+        # plt.ylabel(" Prediction Score %")
+        # plt.savefig("mygraph.png")
+
+
+        fig, ax = plt.subplots()
         plt.plot(self.TIME_STAMP[::25], self.SCORES[::25])
-        plt.xlabel("Time Stamp in seconds")
-        plt.ylabel(" Prediction Score %")
-        plt.savefig("mygraph.png")
+        ax.set(title='Sacchi Disk Detection', xlabel='Time Stamp in second', ylabel='Prediction Score %')
+        fig.savefig('sacchi.png', transparent=False, dpi=80, bbox_inches="tight")
+        print("File Saved")
         #plt.show()
 
-        
 
 if __name__=="__main__":
     print("predict.py")
-    p = Predict('YDXJ0042.mp4')
+    p = Predict('Yi-Site1.mp4')
     p.run()
     p.plot()

@@ -59,9 +59,6 @@ setup(
     license="Apache 2.0",
     url=URL,
     packages=find_packages(),
-    package_data={
-        "": ["*.meta"],
-    },
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
@@ -79,4 +76,5 @@ setup(
     ],
     zip_safe=False,
     namespace_packages=['cloudmesh'],
+    include_package_data=True
 )

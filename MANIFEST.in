@@ -4,5 +4,8 @@ include cloudmesh/__init__.py
 recursive-include cloudmesh *.meta
 recursive-include cloudmesh *.index
 recursive-include cloudmesh *.pb
+recursive-include cloudmesh *.pbtxt
+graft cloudmesh/secchi/tensorflow/annotations
+graft cloudmesh/secchi/tensorflow/trained-inference-graphs
 exclude .gitignore
 exclude .gitreview
