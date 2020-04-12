@@ -36,7 +36,7 @@ pygments
 
 version = readfile("VERSION")[0].strip()
 
-with open('README.md') as f:
+with open('README-old1.md') as f:
     long_description = f.read()
 
 
