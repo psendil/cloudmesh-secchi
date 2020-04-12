@@ -30,6 +30,12 @@ def readfile(filename):
 requiers = """
 psutil
 pygments
+tensorflow==1.14
+pillow
+lxml
+matplotlib
+opencv-python
+cython
 """.split("\n")
 
 # dependency_links = ['http://github.com/nicolaiarocci/eve.git@develop']
