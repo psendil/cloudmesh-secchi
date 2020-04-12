@@ -125,7 +125,7 @@ class SecchiCommand(PluginCommand):
         elif arguments.show and arguments.graph:
             p = Path(os.path.abspath(__file__))
             path = p.parent.parent
-            file = os.path.join(path, 'src','sacchi.png')
+            file = os.path.join(path, 'tensorflow','sacchi.png')
             
             #fileObject = open(file, 'r')
             if os.path.exists(file):

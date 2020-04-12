@@ -32,28 +32,25 @@ pip install pillow, lxml, matplotlib, opencv-python, cython
 
 ## command line execution
 
-### Upload video file to src folder through cms command(IN Progress)
+### Upload video file to src folder through cms command
 
 ```
 cms secchi upload '~/Desktop/file.mp4' --predict
 ```
 
-For now, upload video file manually in src folder under cloudmesh-secchi.
-
-### Run predict through cms command(IN PROGRESS)
+### Run predict through cms command
 
 ```
 cms secchi run --predict
 ```
 
-To run it manually: 
-
-* change video_name variable in line 37 of src/predict.py.
+### Get the graph output
 
 ```
-VIDEO_NAME = 'Yi-Site1.mp4' # update file name here
+
+cms secchi show graph
+
 ```
-* run predict.py file in src folder
 
 ### Predict Screen and Graph
 
