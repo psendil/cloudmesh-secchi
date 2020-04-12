@@ -145,6 +145,9 @@ class Predict:
                 line_thickness=8,
                 min_score_thresh=0.60)
 
+            self.overlay_text(str(f"file:{self.VIDEO_NAME}"), frame, (1600, 950), 1)
+            self.overlay_text(str(f"time: {round(time_stamp/1000,2)}s"),frame,(1600,1000),1)
+            #cv2.putText(frame,str(f"TimeStamp: {round(time_stamp/1000,2)}s"),(1600,1000),cv2.FONT_HERSHEY_PLAIN,1,(0,140,255),3)
             resize = cv2.resize(frame, None, fx=self.scaling_factorx, fy=self.scaling_factory, interpolation=cv2.INTER_AREA)
             # All the results have been drawn on the frame, so it's time to display it.
             cv2.imshow('Object detector', resize)
@@ -156,7 +159,10 @@ class Predict:
             # Press 'q' to quit
             if cv2.waitKey(1) == ord('q'):
                 break
-
+            if video.get(cv2.CAP_PROP_POS_FRAMES) == video.get(cv2.CAP_PROP_FRAME_COUNT):
+                # If the number of captured frames is equal to the total number of frames,
+                # we stop
+                break
         # Clean up
         # plt.plot(boxes,scores)
         # print("SCORES LIST: ",self.SCORES)
@@ -175,15 +181,36 @@ class Predict:
 
 
         fig, ax = plt.subplots()
-        plt.plot(self.TIME_STAMP[::25], self.SCORES[::25])
+        plt.plot(self.TIME_STAMP[::25], self.SCORES[::25],marker=".")
         ax.set(title='Sacchi Disk Detection', xlabel='Time Stamp in second', ylabel='Prediction Score %')
+        if os.path.isfile("sacchi.png"):
+            print("File Exists: Deleting....")
+            os.remove("sacchi.png")
+            print(os.path.isfile("sacchi.png"))
         fig.savefig('sacchi.png', transparent=False, dpi=80, bbox_inches="tight")
+        #     delete file
+        #     dave file
         print("File Saved")
+        plt.close()
         #plt.show()
 
+    def overlay_text(self,txt, img, ll, fscale=1):
+        """Use OpenCV to overlay text"""
+        font = cv2.FONT_HERSHEY_DUPLEX
+        bottomLeftCornerOfText = ll
+        fontScale = fscale
+        fontColor = (0, 150, 255)  # (0,140,255) # BGR
+        lineType = 2
+
+        cv2.putText(img, txt,
+                    bottomLeftCornerOfText,
+                    font,
+                    fontScale,
+                    fontColor,
+                    lineType)
 
 if __name__=="__main__":
     print("predict.py")
-    p = Predict('Yi-Site1.mp4')
+    p = Predict('YDXJ0042.mp4')
     p.run()
     p.plot()
