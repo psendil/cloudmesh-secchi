@@ -26,8 +26,8 @@ class SecchiCommand(PluginCommand):
         ::
 
           Usage:
-                secchi upload [FILE][--training][--validate][--predict]
-                secchi list input [--training][--validate][--predict]
+                secchi upload [FILE][--training] [--validate][--predict]
+                secchi list input [--training] [--validate] [--predict]
                 sechhi delete VIDEOS
                 secchi server start
                 secchi server stop
@@ -35,7 +35,7 @@ class SecchiCommand(PluginCommand):
                 secchi labelImg install
                 secchi labelImg run
                 secchi captureImage
-                secchi run [--predict][--training]
+                secchi run [--predict] [--training]
                 secchi remove [VIDEO][--training][--validate][--predict]
                 secchi show graph
 
@@ -43,15 +43,15 @@ class SecchiCommand(PluginCommand):
 
           Arguments:
               upload   To upload training, validation, prediction files.
-              list      To list out all the files
-              delete
-              server
-              start
-              stop
+              list    To list out all the files
+              input  input
+              delete  cc
+              server  cc
+              start  cc
+              stop  cc
+              FILE         a file or directory name to upload
 
           Options:
-              FILE          a file or directory name to upload
-              input         input files.
               --training    command is used for training
               --validate    command is used for validation set
               --predict     command is used for prediction
@@ -93,7 +93,7 @@ class SecchiCommand(PluginCommand):
         elif arguments.captureImage:
             print("capture image from videos for training purpose")
 
-        elif arguments.list and arguments.input:
+        elif arguments["list"] and arguments.input:
             if arguments.predict:
                 print("list all input video")
             elif arguments.training:
