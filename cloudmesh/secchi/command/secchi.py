@@ -1,17 +1,16 @@
 from __future__ import print_function
 
-from cloudmesh import shell
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.secchi.video import Video
-from cloudmesh.secchi.api.manager import Manager
-from cloudmesh.common.console import Console
-from cloudmesh.common.util import path_expand, banner
-from pprint import pprint
+from cloudmesh.common.util import path_expand
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.shell.command import map_parameters
 import os
 from pathlib import Path
+from cloudmesh.secchi.tensorflow.preprocessing.partition_dataset import PartitionDataset
+from cloudmesh.secchi.tensorflow.preprocessing.xml_to_csv import XmlToCSV
+from cloudmesh.secchi.tensorflow.preprocessing.generate_tfrecord import GenTF
 
 # from.cloudmesh.secchi.tensorflow.predict import predict
 #from src.predict import Predict
@@ -38,6 +37,9 @@ class SecchiCommand(PluginCommand):
                 secchi run [--predict] [--training]
                 secchi remove [VIDEO][--training][--validate][--predict]
                 secchi show graph
+                secchi create partitiondataset [INPUTDIR] [--ratio=0.2]
+                secchi delete partitiondataset
+                secchi prep --training
 
           This command does some useful things.
 
@@ -65,7 +67,8 @@ class SecchiCommand(PluginCommand):
         map_parameters(arguments,
                        'training',
                        'validate',
-                       'predict')
+                       'predict',
+                       'ratio')
 
         VERBOSE(arguments)
 
@@ -84,7 +87,7 @@ class SecchiCommand(PluginCommand):
                 print("Size limit 100MB exceeds. End upload")
             # validate extension:
             else:
-                v = Video("~/.cloudmesh/secchi")
+                v = Video()
                 if(v.validateFileFormat(file,'predict')):
                     # valid format
                     print("format is valid")
@@ -132,6 +135,33 @@ class SecchiCommand(PluginCommand):
               os.system(file)
             else:
               print("File doesn't exists")
+# Code for partitioning dataset. 10-19
+        elif arguments.partitiondataset and arguments.delete:
+
+            pd = PartitionDataset()
+            pd.delete()
+
+        elif arguments.create and arguments.partitiondataset:
+
+            inputDir = path_expand(arguments.INPUTDIR)
+            if arguments.ratio:
+                ratio = float(arguments.ratio)
+            else:
+                ratio = 0.1
+            print(f"inputDir: {inputDir}, ratio: {ratio}")
+            pd = PartitionDataset(inputDir, ratio)
+            pd.run()
+
+        elif arguments.prep and arguments.training:
+            # converts img xml to csv
+            xtc = XmlToCSV()
+            xtc.xml_csv_conv()
+            # converts csv to TF record
+            gtf_train = GenTF('train')
+            gtf_train.create()
+            gtf_test = GenTF('test')
+            gtf_test.create()
+
 
         return ""
 
